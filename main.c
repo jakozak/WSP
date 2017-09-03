@@ -97,16 +97,16 @@ void scTaskAlertCallback(void) {
 
 /// Output data structure
 typedef struct {
-	uint16_t deviceID;			///< Device ID
-	uint16_t measurementStatus;	///< I2C measurement status. 0 - OK, 1 - error
-	uint16_t hshcalHumiValue;  	///< HSHCAL humidity measurement result
-    uint16_t hshcalTempValue;  	///< HSHCAL temperature measurement result
-    uint16_t hsppadPressValue; 	///< HSPPAD pressure measurement result
-    uint16_t hsppadTempValue;  	///< HSPPAD temperature measurement result
-    uint16_t hsudddUvbValue;   	///< HSUDDD UVB measurement result
-    uint16_t illuValue;        	///< Opt3001 illuminance measurement result
-    int32_t adcValue;         	///< ADC Value
-    int32_t batteryValue;       ///< Battery voltage through resistor divider
+		uint16_t deviceID;			///< Device ID
+		uint16_t measurementStatus;	///< I2C measurement status. 0 - OK, 1 - error
+		uint16_t hshcalHumiValue;  	///< HSHCAL humidity measurement result
+	    uint16_t hshcalTempValue;  	///< HSHCAL temperature measurement result
+	    uint16_t hsppadPressValue; 	///< HSPPAD pressure measurement result
+	    uint16_t hsppadTempValue;  	///< HSPPAD temperature measurement result
+	    uint16_t hsudddUvbValue;   	///< HSUDDD UVB measurement result
+	    uint16_t illuValue;        	///< Opt3001 illuminance measurement result
+	    int32_t adcValue;         	///< ADC Value
+	    int32_t batteryValue;       ///< Battery voltage through resistor divider
 } UART_OUTPUT_STRUCTURE;
 
 UART_OUTPUT_STRUCTURE scOutputData;
@@ -114,7 +114,7 @@ UART_OUTPUT_STRUCTURE scOutputData;
 
 /* Pin driver handle */
 static PIN_Handle 	xbeePinHandle, ledPinHandle, interruptSleepHandle, interruptAssctHandle;
-static PIN_State 	xbeePinState, ledPinState, interruptSleepState, interruptAssctState;
+static PIN_State 	xbeePinState, ledPinState, interruptAssctState;
 
 
 
@@ -129,15 +129,11 @@ PIN_Config ledPinTable[] = {
 
 PIN_Config xbeePinTable[] = {
 	Board_XBEE_SLP   | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW   | PIN_PUSHPULL | PIN_DRVSTR_MIN,
-	Board_3V3_EN   	 | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW   | PIN_PUSHPULL | PIN_DRVSTR_MIN,
+	Board_3V3_EN   	 | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH   | PIN_PUSHPULL | PIN_DRVSTR_MIN,
 	Board_VTRANS_EN  | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW   | PIN_PUSHPULL | PIN_DRVSTR_MIN,
 	PIN_TERMINATE
 };
 
-PIN_Config interruptSleepTable[] = {
-	Board_SLEEP_IND	 | PIN_INPUT_EN 	  | PIN_NOPULL		| PIN_IRQ_DIS,
-	PIN_TERMINATE
-};
 
 PIN_Config interruptAssctTable[] = {
 	Board_ASSCT		 | PIN_INPUT_EN 	  | PIN_NOPULL		| PIN_IRQ_DIS,
@@ -146,9 +142,6 @@ PIN_Config interruptAssctTable[] = {
 
 void taskReadFxn(UArg a0, UArg a1) {
 
-	//int32_t adcOffset = AUXADCGetAdjustmentOffset(AUXADC_REF_VDDS_REL);
-	//int32_t adcGainError = AUXADCGetAdjustmentGain(AUXADC_REF_VDDS_REL);
-	//int32_t adcCorrectedValue, batteryCorrectedValue;
 
 	scOutputData.deviceID = 0x04;
 
@@ -159,7 +152,7 @@ void taskReadFxn(UArg a0, UArg a1) {
     scifInit(&scifDriverSetup);
 
     // Set the Sensor Controller task tick interval to 20 second
-    scifStartRtcTicks(0x00020000, 0x02580000);
+    scifStartRtcTicks(0x00020000, 0x00140000);
 
     // Configure to trigger interrupt at first result, and start the Sensor Controller's I2C Light
     // Sensor task (not to be confused with OS tasks)
@@ -176,11 +169,8 @@ void taskReadFxn(UArg a0, UArg a1) {
         scifClearAlertIntSource();
 
         PIN_setOutputValue(ledPinHandle, Board_LED, Board_LED_OFF);
-        PIN_setOutputValue(xbeePinHandle, Board_3V3_EN, 1);
 		PIN_setOutputValue(xbeePinHandle, Board_XBEE_SLP, 0);
 
-        //batteryCorrectedValue = AUXADCAdjustValueForGainAndOffset((int32_t) scifTaskData.i2cAndAdcSensors.output.batteryValue, adcGainError, adcOffset);
-        //adcCorrectedValue = AUXADCAdjustValueForGainAndOffset((int32_t) scifTaskData.i2cAndAdcSensors.output.adcValue, adcGainError, adcOffset);
         scOutputData.measurementStatus = scifTaskData.i2cAndAdcSensors.state.i2cStatus;
 		scOutputData.hshcalHumiValue = scifTaskData.i2cAndAdcSensors.output.hshcalHumiValue;
 		scOutputData.hshcalTempValue = scifTaskData.i2cAndAdcSensors.output.hshcalTempValue;
@@ -224,16 +214,10 @@ void taskSendFxn(UArg a0, UArg a1) {
 		 UART_write(uart, &scOutputData, sizeof(scOutputData));
 		 UART_close(uart);
 		 PIN_setOutputValue(xbeePinHandle, Board_VTRANS_EN, 0);
-		 PIN_setInterrupt(interruptSleepHandle, Board_SLEEP_IND|PIN_IRQ_NEGEDGE);
 		 PIN_setOutputValue(xbeePinHandle, Board_XBEE_SLP, 1);
 	}
 } // taskSendFxn
 
-void sleepCallbackFxn(PIN_Handle handle, PIN_Id pinId) {
-	PIN_setInterrupt(interruptSleepHandle, Board_SLEEP_IND|PIN_IRQ_DIS);
-	PIN_setOutputValue(xbeePinHandle, Board_3V3_EN, 0);
-	PIN_setOutputValue(xbeePinHandle, Board_XBEE_SLP, 0);
-}
 
 void assctCallbackFxn(PIN_Handle handle, PIN_Id pinId) {
 	i++;
@@ -287,27 +271,15 @@ int main(void) {
 		System_abort("Error initializing pins\n");
 	}
 
-	interruptSleepHandle = PIN_open(&interruptSleepState, interruptSleepTable);
-	if(!interruptSleepHandle) {
-		System_abort("Error initializing pins\n");
-	}
-
 	interruptAssctHandle = PIN_open(&interruptAssctState, interruptAssctTable);
 	if(!interruptAssctHandle) {
 		System_abort("Error initializing pins\n");
-	}
-
-    /* Setup callback for SLEEP_IND pin */
-	if (PIN_registerIntCb(interruptSleepHandle, &sleepCallbackFxn) != 0) {
-		System_abort("Error registering button callback function");
 	}
 
 	/* Setup callback for ASSCT pin */
 	if (PIN_registerIntCb(interruptAssctHandle, &assctCallbackFxn) != 0) {
 		System_abort("Error registering button callback function");
 	}
-
-
 
     // Start TI-RTOS
     BIOS_start();
@@ -324,8 +296,7 @@ void connTimeExp(void) {
 		PIN_setInterrupt(interruptAssctHandle, Board_ASSCT|PIN_IRQ_DIS);
 		PIN_setInterrupt(interruptSleepHandle, Board_SLEEP_IND|PIN_IRQ_DIS);
 		PIN_setOutputValue(xbeePinHandle, Board_VTRANS_EN, 0);
-		PIN_setOutputValue(xbeePinHandle, Board_3V3_EN, 0);
-		PIN_setOutputValue(xbeePinHandle, Board_XBEE_SLP, 0);
+		PIN_setOutputValue(xbeePinHandle, Board_XBEE_SLP, 1);
 
 	}
 
