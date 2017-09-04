@@ -52,6 +52,7 @@
 // #include <ti/drivers/Watchdog.h>
 #include <driverlib/aux_adc.h>
 
+#include <inc/hw_fcfg1.h>
 
 /* Board Header files */
 #include "Board.h"
@@ -80,6 +81,8 @@ static Semaphore_Struct semScTaskAlert;
 // Semaphore used to wait for network assotiation of Xbee
 static Semaphore_Struct semAssct;
 
+
+
 uint8_t i=0;
 uint32_t j=0;
 
@@ -96,8 +99,9 @@ void scTaskAlertCallback(void) {
 } // scTaskAlertCallback
 
 /// Output data structure
+#pragma pack(push, 1)
 typedef struct {
-	uint16_t deviceID;			///< Device ID
+	uint32_t deviceID;			///< Device ID
 	uint16_t measurementStatus;	///< I2C measurement status. 0 - OK, 1 - error
 	uint16_t hshcalHumiValue;  	///< HSHCAL humidity measurement result
     uint16_t hshcalTempValue;  	///< HSHCAL temperature measurement result
@@ -108,6 +112,7 @@ typedef struct {
     int32_t adcValue;         	///< ADC Value
     int32_t batteryValue;       ///< Battery voltage through resistor divider
 } UART_OUTPUT_STRUCTURE;
+#pragma pack(pop)
 
 UART_OUTPUT_STRUCTURE scOutputData;
 
@@ -150,8 +155,6 @@ void taskReadFxn(UArg a0, UArg a1) {
 	//int32_t adcGainError = AUXADCGetAdjustmentGain(AUXADC_REF_VDDS_REL);
 	//int32_t adcCorrectedValue, batteryCorrectedValue;
 
-	scOutputData.deviceID = 0x04;
-
     // Initialize the Sensor Controller
     scifOsalInit();
     scifOsalRegisterCtrlReadyCallback(scCtrlReadyCallback);
@@ -159,7 +162,8 @@ void taskReadFxn(UArg a0, UArg a1) {
     scifInit(&scifDriverSetup);
 
     // Set the Sensor Controller task tick interval to 20 second
-    scifStartRtcTicks(0x00020000, 0x02580000);
+    scifStartRtcTicks(0x00020000, 0x02580000); //10 min
+    //scifStartRtcTicks(0x00020000, 0x00140000); //20 sec
 
     // Configure to trigger interrupt at first result, and start the Sensor Controller's I2C Light
     // Sensor task (not to be confused with OS tasks)
@@ -307,8 +311,7 @@ int main(void) {
 		System_abort("Error registering button callback function");
 	}
 
-
-
+	scOutputData.deviceID = *((uint32_t *)(FCFG1_BASE + FCFG1_O_MAC_15_4_0));
     // Start TI-RTOS
     BIOS_start();
     return 0;
