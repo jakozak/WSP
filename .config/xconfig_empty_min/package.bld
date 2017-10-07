@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/empty_min.cfg',
+        cfgScript: 'C:/Projects/Wireless_Sensor_Platform_2_21_RTOS/empty_min.cfg',
         profile: 'release',
         cfgHome: 'xconfig_empty_min',
 });
@@ -40,8 +40,8 @@ else {
 }
 
 var thisObj = {
-    cfg:        'C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/empty_min.cfg',
-    outputPath: 'C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/.config/xconfig_empty_min',
+    cfg:        'C:/Projects/Wireless_Sensor_Platform_2_21_RTOS/empty_min.cfg',
+    outputPath: 'C:/Projects/Wireless_Sensor_Platform_2_21_RTOS/.config/xconfig_empty_min',
     exeName:    'empty_min' + suffix,
     exeIntName: 'empty_min' + suffix.replace('.', '_'),
     targ:       targ,

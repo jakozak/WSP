@@ -151,9 +151,9 @@ PIN_Config interruptAssctTable[] = {
 
 void taskReadFxn(UArg a0, UArg a1) {
 
-	//int32_t adcOffset = AUXADCGetAdjustmentOffset(AUXADC_REF_VDDS_REL);
-	//int32_t adcGainError = AUXADCGetAdjustmentGain(AUXADC_REF_VDDS_REL);
-	//int32_t adcCorrectedValue, batteryCorrectedValue;
+//	int32_t adcOffset = AUXADCGetAdjustmentOffset(AUXADC_REF_FIXED);
+//	int32_t adcGainError = AUXADCGetAdjustmentGain(AUXADC_REF_FIXED);
+//	int32_t adcCorrectedValue, batteryCorrectedValue;
 
     // Initialize the Sensor Controller
     scifOsalInit();
@@ -162,13 +162,12 @@ void taskReadFxn(UArg a0, UArg a1) {
     scifInit(&scifDriverSetup);
 
     // Set the Sensor Controller task tick interval to 20 second
-    scifStartRtcTicks(0x00020000, 0x02580000); //10 min
-    //scifStartRtcTicks(0x00020000, 0x00140000); //20 sec
+    //scifStartRtcTicks(0x00020000, 0x02580000); //10 min
+    scifStartRtcTicks(0x00020000, 0x00140000); //20 sec
 
     // Configure to trigger interrupt at first result, and start the Sensor Controller's I2C Light
     // Sensor task (not to be confused with OS tasks)
     scifStartTasksNbl(BV(SCIF_I2C_AND_ADC_SENSORS_TASK_ID));
-
 
     // Main loop
     while (1) {
@@ -192,8 +191,8 @@ void taskReadFxn(UArg a0, UArg a1) {
 		scOutputData.hsppadTempValue = scifTaskData.i2cAndAdcSensors.output.hsppadTempValue;
 		scOutputData.hsudddUvbValue = scifTaskData.i2cAndAdcSensors.output.hsudddUvbValue;
 		scOutputData.illuValue = scifTaskData.i2cAndAdcSensors.output.illuValue;
-        scOutputData.adcValue = AUXADCValueToMicrovolts(AUXADC_FIXED_REF_VOLTAGE_NORMAL, scifTaskData.i2cAndAdcSensors.output.adcValue);
-        scOutputData.batteryValue = AUXADCValueToMicrovolts(AUXADC_FIXED_REF_VOLTAGE_NORMAL, scifTaskData.i2cAndAdcSensors.output.batteryValue);
+		scOutputData.adcValue = AUXADCValueToMicrovolts(AUXADC_FIXED_REF_VOLTAGE_NORMAL, (int32_t) scifTaskData.i2cAndAdcSensors.output.adcValue);
+        scOutputData.batteryValue = AUXADCValueToMicrovolts(AUXADC_FIXED_REF_VOLTAGE_NORMAL, (int32_t) scifTaskData.i2cAndAdcSensors.output.batteryValue);
 
         // Acknowledge the alert event
         scifAckAlertEvents();
@@ -213,7 +212,7 @@ void taskSendFxn(UArg a0, UArg a1) {
 		UART_Params_init(&uartParams);
 		uartParams.writeDataMode = UART_DATA_BINARY;
 		uartParams.readEcho = UART_ECHO_OFF;
-		uartParams.baudRate = 9600;
+		uartParams.baudRate = 9600;  //Above 9600 on MCU 0xFF added on the end of transmission
 
 	while(1) {
 		Semaphore_pend(Semaphore_handle(&semAssct), BIOS_WAIT_FOREVER);

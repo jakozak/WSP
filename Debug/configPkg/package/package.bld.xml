@@ -7,7 +7,7 @@
         <srcFile name="package/cfg/empty_min_pem3.c"/>
     </sources>
     <configscripts>
-        <srcFile name="C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/empty_min.cfg"/>
+        <srcFile name="C:/Projects/Wireless_Sensor_Platform/empty_min.cfg"/>
     </configscripts>
     <makefiles>
         <srcFile name="package.mak" src="package.bld"/>
@@ -44,7 +44,7 @@
         isPartial="false"
         xCfgScript="package/cfg/empty_min_pem3.cfg"
         xCfgPrefix="package/cfg/empty_min_pem3"
-        cfgScript="C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/empty_min.cfg"
+        cfgScript="C:/Projects/Wireless_Sensor_Platform/empty_min.cfg"
         cfgArgs="null"
         />
     </configurations>
@@ -56,7 +56,7 @@
         profile="release"
         xCfgScript="package/cfg/empty_min_pem3.cfg"
         xCfgPrefix="package/cfg/empty_min_pem3"
-        cfgScript="C:/Users/Kuba/workspace_v6_1_3/Wireless_Sensor_Platform_RTOS_2_20_End_Device/empty_min.cfg"
+        cfgScript="C:/Projects/Wireless_Sensor_Platform/empty_min.cfg"
         cfgArgs="null"
         />
     </executables>

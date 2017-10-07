@@ -11,12 +11,6 @@ GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
 "./CC2650DK_7ID.obj" \
-"./SensorHSHCAL.obj" \
-"./SensorHSPPAD.obj" \
-"./SensorHSUDDD.obj" \
-"./SensorI2C.obj" \
-"./SensorOpt3001.obj" \
-"./SensorUtil.obj" \
 "./ccfg.obj" \
 "./main.obj" \
 "./scif.obj" \
@@ -24,7 +18,7 @@ ORDERED_OBJS += \
 "./scif_osal_tirtos.obj" \
 "../CC2650DK_7ID.cmd" \
 $(GEN_CMDS__FLAG) \
--l"C:/ti/tirtos_cc13xx_cc26xx_2_20_00_06/products/cc26xxware_2_24_02_17202/driverlib/bin/ccs/driverlib.lib" \
+-l"C:/ti/tirtos_cc13xx_cc26xx_2_21_00_06/products/cc26xxware_2_24_03_17272/driverlib/bin/ccs/driverlib.lib" \
 -llibc.a \
 
 -include ../makefile.init
@@ -132,32 +126,32 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-Wireless_Sensor_Platform_RTOS_2_20_End_Device.out \
+Wireless_Sensor_Platform.out \
 
 EXE_OUTPUTS__QUOTED += \
-"Wireless_Sensor_Platform_RTOS_2_20_End_Device.out" \
+"Wireless_Sensor_Platform.out" \
 
 BIN_OUTPUTS += \
-Wireless_Sensor_Platform_RTOS_2_20_End_Device.hex \
+Wireless_Sensor_Platform.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"Wireless_Sensor_Platform_RTOS_2_20_End_Device.hex" \
+"Wireless_Sensor_Platform.hex" \
 
 
 # All Target
-all: Wireless_Sensor_Platform_RTOS_2_20_End_Device.out
+all: Wireless_Sensor_Platform.out
 
 # Tool invocations
-Wireless_Sensor_Platform_RTOS_2_20_End_Device.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+Wireless_Sensor_Platform.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armcl" -mv7M3 --code_state=16 --float_support=vfplib -me -g --define=ccs --diag_wrap=off --diag_warning=225 --diag_warning=255 --display_error_number --gen_func_subsections=on --abi=eabi -z -m"Wireless_Sensor_Platform_RTOS_2_20_End_Device.map" --stack_size=256 --heap_size=0 -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Wireless_Sensor_Platform_RTOS_2_20_End_Device_linkInfo.xml" --rom_model -o "Wireless_Sensor_Platform_RTOS_2_20_End_Device.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armcl" -mv7M3 --code_state=16 --float_support=vfplib -me -g --define=ccs --diag_wrap=off --diag_warning=225 --diag_warning=255 --display_error_number --gen_func_subsections=on --abi=eabi -z -m"Wireless_Sensor_Platform.map" --stack_size=256 --heap_size=0 -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Wireless_Sensor_Platform_linkInfo.xml" --rom_model -o "Wireless_Sensor_Platform.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Wireless_Sensor_Platform_RTOS_2_20_End_Device.hex: $(EXE_OUTPUTS)
+Wireless_Sensor_Platform.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armhex" --memwidth=8 --romwidth=8 --intel -o "Wireless_Sensor_Platform_RTOS_2_20_End_Device.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armhex" --memwidth=8 --romwidth=8 --intel -o "Wireless_Sensor_Platform.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -165,8 +159,8 @@ Wireless_Sensor_Platform_RTOS_2_20_End_Device.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)$(GEN_CMDS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "CC2650DK_7ID.d" "SensorHSHCAL.d" "SensorHSPPAD.d" "SensorHSUDDD.d" "SensorI2C.d" "SensorOpt3001.d" "SensorUtil.d" "ccfg.d" "main.d" "scif.d" "scif_framework.d" "scif_osal_tirtos.d" 
-	-$(RM) "CC2650DK_7ID.obj" "SensorHSHCAL.obj" "SensorHSPPAD.obj" "SensorHSUDDD.obj" "SensorI2C.obj" "SensorOpt3001.obj" "SensorUtil.obj" "ccfg.obj" "main.obj" "scif.obj" "scif_framework.obj" "scif_osal_tirtos.obj" 
+	-$(RM) "CC2650DK_7ID.d" "ccfg.d" "main.d" "scif.d" "scif_framework.d" "scif_osal_tirtos.d" 
+	-$(RM) "CC2650DK_7ID.obj" "ccfg.obj" "main.obj" "scif.obj" "scif_framework.obj" "scif_osal_tirtos.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

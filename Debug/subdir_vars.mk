@@ -11,12 +11,6 @@ CFG_SRCS += \
 
 C_SRCS += \
 ../CC2650DK_7ID.c \
-../SensorHSHCAL.c \
-../SensorHSPPAD.c \
-../SensorHSUDDD.c \
-../SensorI2C.c \
-../SensorOpt3001.c \
-../SensorUtil.c \
 ../ccfg.c \
 ../main.c \
 ../scif.c \
@@ -25,12 +19,6 @@ C_SRCS += \
 
 OBJS += \
 ./CC2650DK_7ID.obj \
-./SensorHSHCAL.obj \
-./SensorHSPPAD.obj \
-./SensorHSUDDD.obj \
-./SensorI2C.obj \
-./SensorOpt3001.obj \
-./SensorUtil.obj \
 ./ccfg.obj \
 ./main.obj \
 ./scif.obj \
@@ -39,12 +27,6 @@ OBJS += \
 
 C_DEPS += \
 ./CC2650DK_7ID.d \
-./SensorHSHCAL.d \
-./SensorHSPPAD.d \
-./SensorHSUDDD.d \
-./SensorI2C.d \
-./SensorOpt3001.d \
-./SensorUtil.d \
 ./ccfg.d \
 ./main.d \
 ./scif.d \
@@ -73,12 +55,6 @@ GEN_MISC_DIRS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "CC2650DK_7ID.d" \
-"SensorHSHCAL.d" \
-"SensorHSPPAD.d" \
-"SensorHSUDDD.d" \
-"SensorI2C.d" \
-"SensorOpt3001.d" \
-"SensorUtil.d" \
 "ccfg.d" \
 "main.d" \
 "scif.d" \
@@ -87,12 +63,6 @@ C_DEPS__QUOTED += \
 
 OBJS__QUOTED += \
 "CC2650DK_7ID.obj" \
-"SensorHSHCAL.obj" \
-"SensorHSPPAD.obj" \
-"SensorHSUDDD.obj" \
-"SensorI2C.obj" \
-"SensorOpt3001.obj" \
-"SensorUtil.obj" \
 "ccfg.obj" \
 "main.obj" \
 "scif.obj" \
@@ -101,12 +71,6 @@ OBJS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../CC2650DK_7ID.c" \
-"../SensorHSHCAL.c" \
-"../SensorHSPPAD.c" \
-"../SensorHSUDDD.c" \
-"../SensorI2C.c" \
-"../SensorOpt3001.c" \
-"../SensorUtil.c" \
 "../ccfg.c" \
 "../main.c" \
 "../scif.c" \
